@@ -309,3 +309,28 @@ postgres=# \c <dbname>
 ```
 $ sudo ufw allow proto tcp from 192.168.101/24 to any port 6336
 ```
+
+### Manage Extension
+
+#### List Installed Extensions
+
+```
+$ sudo apt search postgresql-contrib-16
+$ ls /usr/share/postgresql/16/extension/
+```
+
+#### List Loaded Extensions
+
+```
+postgres=# SELECT * from pg_extension;
+```
+
+#### Load Installed Extension
+
+```
+postgres=# CREATE EXTENSION "uuid-ossp";
+```
+
+```
+$ psql -U postgres -d <dbname> -f <module>.sql
+```
