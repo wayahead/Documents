@@ -43,6 +43,7 @@ $ sudo apt install libssl-dev
 $ sudo apt install libyaml-dev
 $ sudo apt install zlib1g-dev
 $ sudo apt install build-essential pkgconf
+$ sudo apt install jq
 $ which cc
 $ which gcc
 $ sudo reboot
@@ -270,8 +271,33 @@ end
 
 ## Configure Database
 
+### Set Avram::Credentials
+
 ```
 # Lucky needs postgresql user who is able to create database
 # so you can use super user `postgres` or create new superuser
 $ vi config/database.cr
+```
+
+### Enable/Disable Extension
+
+```
+# enable postgresql extension in db/migrations
+def migrate
+  enable_extension "pgcrypto"
+end
+
+# disable postgresql extension in db/migrations
+def rollback
+  disable_extension "pgcrypto"
+end
+
+# update postgresql extension
+def migrate
+  # Update to the latest version of the extension
+  update_extension "hstore"
+
+  # or update to a specific version
+  update_extension "hstore", to: "2.0"
+end
 ```
