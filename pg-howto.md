@@ -328,6 +328,8 @@ postgres=# SELECT * from pg_extension;
 #### Load Installed Extension
 
 ```
+postgres=# CREATE EXTENSION "citext";
+postgres=# CREATE EXTENSION "pgcrypto";
 postgres=# CREATE EXTENSION "uuid-ossp";
 ```
 
