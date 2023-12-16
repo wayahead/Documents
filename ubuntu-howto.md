@@ -209,7 +209,7 @@ $ sftp -i <private_key.file> wayahead@server
 ### Disable Password Authentication at Server Side
 
 ```
-$ sudo vi /etc/ssh/ssd_config
+$ sudo vi /etc/ssh/sshd_config
 PubkeyAuthentication yes
 PasswordAuthentication no
 AuthorizedKeysFile     .ssh/authorized_keys .ssh/authorized_keys2
