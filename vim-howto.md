@@ -5,6 +5,7 @@
 ```
 $ vim ~/.vimrc
 :set tabstop=2 shiftwidth=2 expandtab
+:set nocompatible
 ```
 
 ## Configure Syntax
