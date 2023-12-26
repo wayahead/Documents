@@ -95,3 +95,31 @@ $ GOOS=darwin GOARCH=amd64 go build -o <Binary>
 ```
 $ GOOS=linux GOARCH=amd64 go build -o <Binary>
 ```
+
+## Modules
+
+### Initialize module
+
+```
+# initialize new module in current directory
+$ go mod init github.com/wayahead/windmill/v2
+# add missing and remove unused modules
+$ go mod tidy
+# make vendored copy of dependencies
+$ go mod vender
+```
+
+### Add, Upgrade and Remove dependency
+
+```
+$ go help get
+# add a dependency
+$ go get example.com/pkg
+# upgrade or downgrade a package to a specific version
+$ go get -u example.com/pkg
+$ go get example.com/pkg@v1.2.3
+# update all dependencies
+$ go get -u
+# remove a dependency
+$ go get example.com/mod@none
+```
