@@ -123,3 +123,62 @@ $ go get -u
 # remove a dependency
 $ go get example.com/mod@none
 ```
+
+## Testing
+
+### Normal Testing
+
+```
+$ go test -v
+$ go test ./...
+$ go test -cover .
+$ go test -coverprofile=coverage.out .
+$ go tool cover -func=coverage.out
+$ go tool cover -html=coverage.out
+$ go tool cover -html=coverage.out -o coverage.xhtml
+```
+
+### Short Testing
+
+```
+$ go test -v -short .
+```
+
+```
+func Test_Example(t *testing.T) {
+  if testing.Short() {
+    t.Skip("skipping test in short mode.")
+  }
+}
+```
+
+### Testing not in Parallel
+
+```
+$ go test -parallel 1 ./...
+```
+
+### Running Specific Tests
+
+```
+$ go test -v -run <pattern> ./...
+$ go test -v -run Example ./...
+```
+
+### Testing Timeout
+
+```
+$ go test -timeout 50ms ./...
+```
+
+### Failing Fast
+
+```
+$ go test -failfast .
+```
+
+### Disabling Test Caching
+
+```
+$ go test -count=1 ./...
+```
