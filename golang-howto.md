@@ -1,14 +1,5 @@
 # Golang Setup Howto
 
-## Configure Vim
-
-```
-$ git clone https://github.com/fatih/vim-go.git ~/.vim/pack/golang/start/vim-go
-$ vim ~/.vimrc
-:set tabstop=2 shiftwidth=2 expandtab
-:set nocompatible
-```
-
 ## Install Golang
 
 ### x64
@@ -19,7 +10,7 @@ $ sudo apt install build-essential git
 $ wget --inet4-only https://go.dev/dl/goX.Y.Z.linux-amd64.tar.gz
 $ sudo tar -C /usr/local -xzf goX.Y.Z.linux-amd64.tar.gz
 $ sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf goX.Y.Z.linux-amd64.tar.gz
-$ export PATH=$PATH:/usr/local/go/bin
+$ export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 $ go version
 ```
 
@@ -31,7 +22,7 @@ $ sudo apt install build-essential git
 $ wget --inet4-only https://go.dev/dl/goX.Y.Z.linux-arm64.tar.gz
 $ sudo tar -C /usr/local -xzf goX.Y.Z.linux-arm64.tar.gz
 $ sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf goX.Y.Z.linux-arm64.tar.gz
-$ export PATH=$PATH:/usr/local/go/bin
+$ export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 $ go version
 ```
 
@@ -61,6 +52,18 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPROXY=https://proxy.golang.com.cn,direct
 $ source $HOME/.profile
 $ go env
+```
+
+## Configure Vim
+
+```
+$ go install golang.org/x/tools/gopls@latest
+$ git clone https://github.com/fatih/vim-go.git ~/.vim/pack/golang/start/vim-go
+$ vim ~/.vimrc
+:set tabstop=2 shiftwidth=2 expandtab
+:set nocompatible
+$ vim ~/.profile
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 ```
 
 ## Initialize Project
