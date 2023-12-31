@@ -14,6 +14,14 @@ $ vim ~/.vimrc
 :set tabstop=2 shiftwidth=2 expandtab
 ```
 
+## Configure Nano
+
+```
+$ vim ~/.nanorc
+set tabsize 2
+set tabstospaces
+```
+
 ## Configure Git
 
 ```
