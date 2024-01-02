@@ -153,7 +153,33 @@ postgres=# \l
 postgres=# \q
 ```
 
+### Load Extensions
+
+* Make sure the extected extensions loaded in the created database.
+
+```
+$ psql -U plato -d platodb
+platodb=> SELECT * from pg_extension;
+platodb=> CREATE EXTENSION IF NOT EXISTS "citext";
+platodb=> CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+platodb=> CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
 ### Open PSQL with New Role
+
+#### Using Psql
+
+```
+# if you create new role `plato` with new database `platodb`
+$ psql -U plato -d platodb
+```
+
+```
+# if you create new role `plato` with new database `plato`
+$ psql -U plato
+```
+
+#### Using Sudo
 
 ```
 # if you create new role `windmill` with new database `windmill`
