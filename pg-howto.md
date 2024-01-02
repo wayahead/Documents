@@ -155,7 +155,7 @@ postgres=# \q
 
 ### Load Extensions
 
-* Make sure the extected extensions loaded in the created database.
+* Make sure the expected extensions loaded in the created database.
 
 ```
 $ psql -U plato -d platodb
