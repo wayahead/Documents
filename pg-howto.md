@@ -51,6 +51,12 @@ $ sudo ss -tulpn|grep postgres
 $ ufw allow 6336/tcp
 ```
 
+### Configure UFW Rules
+
+```
+$ sudo ufw allow proto tcp from 192.168.101/24 to any port 6336
+```
+
 ### Use MD5 Password
 
 ```
@@ -302,12 +308,6 @@ postgres=# SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' A
 
 ```
 postgres=# \c <dbname>
-```
-
-## Configure UFW Rules
-
-```
-$ sudo ufw allow proto tcp from 192.168.101/24 to any port 6336
 ```
 
 ### Manage Extension
