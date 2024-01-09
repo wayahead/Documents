@@ -119,12 +119,18 @@ $ go help get
 # add a dependency
 $ go get example.com/pkg
 # upgrade or downgrade a package to a specific version
-$ go get -u example.com/pkg
+$ go get -u example.com/pkg@latest
 $ go get example.com/pkg@v1.2.3
 # update all dependencies
 $ go get -u
 # remove a dependency
 $ go get example.com/mod@none
+```
+
+### Install binary package
+
+```
+$ go install github.com/spf13/cobra-cli@latest
 ```
 
 ## Testing
