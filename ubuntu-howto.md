@@ -157,13 +157,62 @@ $ sudo netplan apply
 $ sudo netplan --debug apply
 ```
 
-### Disable IPv6 in `/etc/default/grub`
+### Disable IPv6
+
+#### Disable IPv6 in `/etc/default/grub`
 
 ```
 $ sudo vi /etc/default/grub
 GRUB_CMDLINE_LINUX="maybe-ubiquity transparent_hugepage=never ipv6.disable=1"
 GRUB_CMDLINE_LINUX_DEFAULT="maybe-ubiquity transparent_hugepage=never ipv6.disable=1"
 $ sudo update-grub
+```
+
+#### Disable IPv6 via `sysctl`
+
+```
+$ sudo nano /etc/sysctl.d/60-custom.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+net.ipv6.conf.wlan0.disable_ipv6 = 1
+$ sudo sysctl -p
+$ sudo systemctl restart procps
+$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+```
+
+#### Disable IPv6 in Netplan
+
+```
+$ sudo vi /etc/netplan/10-wifi.yaml
+network:
+  ethernets:
+    wlan0:
+      link-local: [ipv4]
+      dhcp4: no
+      address: [192.168.1.2/24]
+      gateway: 192.168.1.1
+      nameservers:
+        adresses: [127.0.0.1, 10.10.60.1]
+  version: 2
+$ sudo netplan apply
+```
+
+#### Disable IPv6 in NetworkManager
+
+```
+"IPv6 Tab" => "Disable"
+```
+
+```
+$ sudo systemctl restart NetworkManager
+```
+
+#### Disable IPv6 in APT
+
+```
+$ sudo nano /etc/apt/apt.conf.d/99force-ipv4
+Acquire::ForceIPv4 "true"
 ```
 
 ## Configure SSH (Remote-Access)
