@@ -152,6 +152,23 @@ $ git fetch origin
 ### Build a tag of chromium
 
 ```
+# install icecc + cccahe, and enable scheduler:
+$ sudo aptitude install icecc ccache
+$ sudo systemctl enable icecc-scheduler.service
+$ sudo systemctl start icecc-scheduler.service
+
+# download icecc-chromium
+$ cd workspace
+$ git clone https://github.com/lilles/icecc-chromium
+$ vi ~/.bashrc
+export PATH="$HOME/workspace/icecc-chromium:$PATH"
+$ source $HOME/workspace/icecc-chromium/ccache-env
+
+# manually add `custom_hooks` to `/media/src/chromium/.gclient`
+# "custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
+$ vi /media/src/chromium/.gclient
+"custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
+
 # build headless-shell
 $ ./build-headless-shell.sh /path/to/chromium/src 74.0.3717.1
 
