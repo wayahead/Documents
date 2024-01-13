@@ -143,13 +143,13 @@ $ git remote set-url origin https://chromium.googlesource.com/chromium/src.git
 $ git fetch origin
 ```
 
-## Build Headless for `chromedp`
+## Build headless-shell for `chromedp`
 
 [Headless-shell for chromedp](https://github.com/chromedp/docker-headless-shell)
 
 [Headless-shell with CJK](https://github.com/wayahead/docker-headless-shell)
 
-### Build a tag of chromium
+### Build a tag of chromium headless-shell
 
 ```
 # install icecc + cccahe, and enable scheduler:
