@@ -45,63 +45,6 @@ $ cd chromium/src
 $ ./build/install-build-deps.sh
 ```
 
-## Sync a release tag
-
-```
-$ cd workspace
-$ cd chromium/src
-
-# Make sure you have all the release tag information in your checkout.
-$ git fetch --tags
-
-# Checkout whatever version you need (known versions can be seen with
-# 'git show-ref --tags')
-$ git checkout tags/74.0.3729.131
-$ gclient sync --with_branch_heads --with_tags
-```
-
-## Get compatible `depot_tools`
-
-```
-# Get date of current revision:
-$ cd workspace
-$ cd chrome/src
-$ COMMIT_DATE=$(git log -n 1 --pretty=format:%ci)
-
-# Check out depot_tools revision from the same time:
-$ cd workspace
-$ cd depot_tools
-$ git checkout $(git rev-list -n 1 --before="$COMMIT_DATE" main)
-$ export DEPOT_TOOLS_UPDATE=0
-```
-
-## Clean your working directory
-
-```
-$ cd workspace
-$ cd chromium/src
-$ git clean -ffd
-```
-
-## Sync dependencies
-
-```
-$ cd workspace
-$ cd chromium/src
-$ gclient sync -D --force --reset
-$ gclient sync -D --force --reset --with_branch_heads
-```
-
-```
-Warning: gclient sync may overwrite the URL of your origin remote if it encounters problems. You'll notice this when Git starts thinking everything is “untracked” or “deleted”. If this happens, fix and fetch the remote before continuing:
-
-$ cd workspace
-$ cd chromium/src
-$ git remote get-url origin https://chromium.googlesource.com/chromium/deps/opus.git
-$ git remote set-url origin https://chromium.googlesource.com/chromium/src.git
-$ git fetch origin
-```
-
 ## Run the hooks
 
 ```
@@ -139,4 +82,63 @@ $ autoninja -C out/Default chrome
 $ cd workspace
 $ cd chromium/src
 $ out/Default/chrome
+```
+
+## Building old revisions
+
+### Sync a release tag
+
+```
+$ cd workspace
+$ cd chromium/src
+
+# Make sure you have all the release tag information in your checkout.
+$ git fetch --tags
+
+# Checkout whatever version you need (known versions can be seen with
+# 'git show-ref --tags')
+$ git checkout tags/74.0.3729.131
+$ gclient sync --with_branch_heads --with_tags
+```
+
+### Get compatible `depot_tools`
+
+```
+# Get date of current revision:
+$ cd workspace
+$ cd chrome/src
+$ COMMIT_DATE=$(git log -n 1 --pretty=format:%ci)
+
+# Check out depot_tools revision from the same time:
+$ cd workspace
+$ cd depot_tools
+$ git checkout $(git rev-list -n 1 --before="$COMMIT_DATE" main)
+$ export DEPOT_TOOLS_UPDATE=0
+```
+
+### Clean your working directory
+
+```
+$ cd workspace
+$ cd chromium/src
+$ git clean -ffd
+```
+
+### Sync dependencies
+
+```
+$ cd workspace
+$ cd chromium/src
+$ gclient sync -D --force --reset
+$ gclient sync -D --force --reset --with_branch_heads
+```
+
+```
+Warning: gclient sync may overwrite the URL of your origin remote if it encounters problems. You'll notice this when Git starts thinking everything is “untracked” or “deleted”. If this happens, fix and fetch the remote before continuing:
+
+$ cd workspace
+$ cd chromium/src
+$ git remote get-url origin https://chromium.googlesource.com/chromium/deps/opus.git
+$ git remote set-url origin https://chromium.googlesource.com/chromium/src.git
+$ git fetch origin
 ```
