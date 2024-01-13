@@ -68,6 +68,14 @@ v8_symbol_level=0
 $ gn gen out/Default
 ```
 
+### Use icecc
+
+```
+# in order to use icecc, set the following GN args:
+use_debug_fission=false
+is_clang=false
+```
+
 ## Build chromium
 
 ```
