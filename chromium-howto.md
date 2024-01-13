@@ -3,7 +3,9 @@
 ## References
 
 [Get the code: Checkout, Build, & Run Chromium](https://www.chromium.org/developers/how-tos/get-the-code/)
+
 [Checking out and building Chromium on Linux](https://chromium.googlesource.com/chromium/src/+/main/docs/linux/build_instructions.md)
+
 [Building old revisions](https://chromium.googlesource.com/chromium/src/+/main/docs/building_old_revisions.md)
 
 ## System requirements
