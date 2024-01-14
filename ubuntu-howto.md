@@ -10,8 +10,10 @@ $ sudo timedatectl set-timezone Asia/Shanghai
 ## Configure Vim
 
 ```
+$ sudo apt install vim
 $ vim ~/.vimrc
 :set tabstop=2 shiftwidth=2 expandtab
+:set nocompatible
 ```
 
 ## Configure Nano
