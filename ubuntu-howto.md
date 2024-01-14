@@ -29,6 +29,14 @@ $ git config --global user.email "kun.liu@outlook.com"
 $ git config --global user.name "kun.liu"
 ```
 
+## Configure fsck on boot
+
+```
+$ sudo nano /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash fsck.mode=force fsck.repair=yes"
+$ sudo update-grub
+```
+
 ## Configure Networks
 
 ### List Network Interfaces
