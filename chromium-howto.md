@@ -16,6 +16,11 @@
 3. Docuble check curl, git, lsb_release, python3 and sudo
 ```
 
+```
+$ sudo apt install vim curl git
+$ sudo apt install fonts-indic fonts-noto fonts-noto-cjk
+```
+
 ## Install `depot_tools`
 
 ```
@@ -172,9 +177,9 @@ $ vi ~/.bashrc
 export PATH="$HOME/workspace/icecc-chromium:$PATH"
 $ source $HOME/workspace/icecc-chromium/ccache-env
 
-# manually add `custom_hooks` to `/media/src/chromium/.gclient`
+# manually add `custom_hooks` to `~/workspace/chromium/.gclient`
 # "custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
-$ vi /media/src/chromium/.gclient
+$ vi ~/workspace/chromium/.gclient
 "custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
 
 # build headless-shell
