@@ -67,8 +67,8 @@ $ gn args out/Default
 is_debug = false
 is_component_build = true
 symbol_level = 0
-blink_symbol_level=0
-v8_symbol_level=0
+blink_symbol_level = 0
+v8_symbol_level = 0
 
 $ gn gen out/Default
 ```
