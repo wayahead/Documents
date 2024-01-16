@@ -74,8 +74,21 @@ $ sudo docker run hello-world
 ## Get and Run Docker Image
 
 ```
+# pull latest version of headless-shell
 $ sudo docker pull chromedp/headless-shell:latest
-$ sudo docker run -d -p 9222:9222 --rm --name headless-shell chromedp/headless-shell --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
+
+# pull specific tagged version of headless-shell
+$ sudo docker pull chromedp/headless-shell:74.0.3717.1
+
+# run
+$ sudo docker run -d -p 9222:9222 --rm --name headless-shell chromedp/headless-shell
+
+# if headless-shell is crashing with a BUS_ADRERR error, pass a larger shm-size:
+$ sudo docker run -d -p 9222:9222 --rm --name headless-shell --shm-size 2G chromedp/headless-shell
+
+# run with entrypoint
+$ sudo docker run -d -p 9222:9222 --rm --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
+
 $ sudo docker stats
 $ sudo docker stop headless-shell
 ```
@@ -115,22 +128,6 @@ RUN apt-get update -y \
     && apt-get install -y fonts-noto-cjk
 ```
 
-```
-# 1.0
-$ vi Dockerfile
-FROM chromedp/headless-shell:latest
-
-WORKDIR /usr/share/fonts
-
-RUN apt-get update -y \
-    && apt-get install -y fontconfig \
-    && apt-get install -y fonts-indic \
-    && apt-get install -y fonts-noto \
-    && apt-get install -y fonts-noto-cjk \
-    && fc-cache \
-    && fc-list
-```
-
 ### Build New Docker Image
 
 ```
@@ -138,7 +135,6 @@ $ sudo docker build -t bewise/headless-shell:1.1 .
 $ sudo docker images
 REPOSITORY                TAG       IMAGE ID       CREATED          SIZE
 bewise/headless-shell     1.1       a19f419b2c0b   10 seconds ago   1.11GB
-bewise/headless-shell     1.0       ac314e343dd6   8 minutes ago    1.12GB
 chromedp/headless-shell   latest    70b09876e4dd   6 months ago     285MB
 hello-world               latest    d2c94e258dcb   8 months ago     13.3kB
 ```
@@ -146,7 +142,13 @@ hello-world               latest    d2c94e258dcb   8 months ago     13.3kB
 ### Run New Docker Image
 
 ```
-$ sudo docker run -d -p 9222:9222 --rm --name headless-shell bewise/headless-shell:1.1 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
+$ sudo docker run -d -p 9222:9222 --rm --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
 $ sudo docker stats
 $ sudo docker stop headless-shell
+```
+
+### Delete Docker Image
+
+```
+$ sudo docker rm bewise/headless-shell:1.0
 ```
