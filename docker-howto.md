@@ -87,10 +87,31 @@ $ sudo docker run -d -p 9222:9222 --rm --name headless-shell chromedp/headless-s
 $ sudo docker run -d -p 9222:9222 --rm --name headless-shell --shm-size 2G chromedp/headless-shell
 
 # run with entrypoint
-$ sudo docker run --restart always -d -p 9222:9222 --rm --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
+$ sudo docker run --restart always -d -p 9222:9222 --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
 
 $ sudo docker stats
 $ sudo docker stop headless-shell
+$ sudo docker start headless-shell
+```
+## Stop and Delete docker container
+
+### List all containers
+
+```
+$ sudo docker ps -a
+```
+
+### Stop container
+
+```
+$ sudo docker stop <container_id>
+```
+
+### Delete container
+
+```
+$ sudo docker rm <container_id>
+$ sudo docker rm --force <container_id>
 ```
 
 ## Customize Docker Image
@@ -142,9 +163,10 @@ hello-world               latest    d2c94e258dcb   8 months ago     13.3kB
 ### Run New Docker Image
 
 ```
-$ sudo docker run --restart always -d -p 9222:9222 --rm --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
+$ sudo docker run --restart always -d -p 9222:9222 --name headless-shell --shm-size 2G --entrypoint "/headless-shell/headless-shell" bewise/headless-shell:1.1 --no-sandbox --use-gl=angle --use-angle=swiftshader --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-agent="Mozilla/5.0 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36" --disable-web-security --allow-running-insecure-content
 $ sudo docker stats
 $ sudo docker stop headless-shell
+$ sudo docker start headless-shell
 ```
 
 ### Delete Docker Image
