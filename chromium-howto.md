@@ -73,14 +73,6 @@ v8_symbol_level = 0
 $ gn gen out/Default
 ```
 
-### Use icecc
-
-```
-# in order to use icecc, set the following GN args:
-use_debug_fission=false
-is_clang=false
-```
-
 ## Build chromium
 
 ```
@@ -154,57 +146,4 @@ $ cd chromium/src
 $ git remote get-url origin https://chromium.googlesource.com/chromium/deps/opus.git
 $ git remote set-url origin https://chromium.googlesource.com/chromium/src.git
 $ git fetch origin
-```
-
-## Build headless-shell for `chromedp`
-
-[Headless-shell for chromedp](https://github.com/chromedp/docker-headless-shell)
-
-[Headless-shell with CJK](https://github.com/wayahead/docker-headless-shell)
-
-### Build a tag of chromium headless-shell
-
-```
-# install icecc + cccahe, and enable scheduler:
-$ sudo aptitude install icecc ccache
-$ sudo systemctl enable icecc-scheduler.service
-$ sudo systemctl start icecc-scheduler.service
-
-# download icecc-chromium
-$ cd workspace
-$ git clone https://github.com/lilles/icecc-chromium
-$ vi ~/.bashrc
-export PATH="$HOME/workspace/icecc-chromium:$PATH"
-$ source $HOME/workspace/icecc-chromium/ccache-env
-
-# manually add `custom_hooks` to `~/workspace/chromium/.gclient`
-# "custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
-$ vi ~/workspace/chromium/.gclient
-"custom_hooks": [ {"pattern": ".", "action": ["icecc-create-env.py"] } ]
-
-# build headless-shell
-$ ./build-headless-shell.sh /path/to/chromium/src 74.0.3717.1
-
-# build docker image (uses $PWD/out/headless-shell-$VER.tar.bz2)
-$ ./build-docker.sh 74.0.3717.1
-```
-
-### Use headless-shell in docker
-
-```
-# pull latest version of headless-shell
-$ docker pull chromedp/headless-shell:latest
-
-# pull specific tagged version of headless-shell
-$ docker pull chromedp/headless-shell:74.0.3717.1
-
-# run
-$ docker run -d -p 9222:9222 --rm --name headless-shell chromedp/headless-shell
-
-# if headless-shell is crashing with a BUS_ADRERR error, pass a larger shm-size:
-$ docker run -d -p 9222:9222 --rm --name headless-shell --shm-size 2G chromedp/headless-shell
-
-# run as unprivileged user
-# get seccomp profile from https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json
-$ docker run -d -p 9222:9222 --user nobody --security-opt seccomp=chrome.json --entrypoint '/headless-shell/headless-shell' chromedp/headless-shell --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --disable-gpu --headless
 ```
