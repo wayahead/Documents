@@ -46,16 +46,17 @@ $ npm root -g
 $ mkdir $HOME/.npm-global
 $ npm config get prefix
 $ npm config set prefix $HOME/.npm-global
-$ vi $HOME/.profile
-export PATH=~/.npm-global/bin:$PATH
-$ source $HOME/.profile
+$ vi $HOME/.bashrc
+export NPM_CONFIG_PREFIX=$HOME/.npm-global
+export PATH=$PATH:$NPM_CONFIG_PREFIX/bin
+$ source $HOME/.bashrc
 ```
 
 ```
 $ mkdir $HOME/.npm-global
 $ npm config get prefix
 $ npm config set prefix $HOME/.npm-global
-$ vi $HOME/.bashrc
-export NPM_CONFIG_PREFIX=$HOME/.npm-global
-$ source $HOME/.bashrc
+$ vi $HOME/.profile
+export PATH=$PATH:$HOME/.npm-global/bin
+$ source $HOME/.profile
 ```
