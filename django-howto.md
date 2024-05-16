@@ -56,6 +56,9 @@ $ source <venv-name>/bin/activate
 ### Integrate with PostgreSQL
 
 ```
+$ sudo apt install build-essential python3-dev libpq-dev
+$ pg_config --version
+
 (venv-name)$ pip install psycopg2
 (venv-name)$ cd </path/to/proj-name>
 (venv-name)$ vi <proj-name>/settings.py
@@ -616,7 +619,7 @@ class Snippet(models.Model):
         ]
 ```
 
-### Optimize Query with `select_related` and `prefetch_related`\
+### Optimize Query with `select_related` and `prefetch_related`
 
 For ForeignKey relationships, `select_related` can be used to perform a SQL join and fetch related objects in a single query. Meanwhile, `prefetch_related` is used for ManyToMany and reverse ForeignKey relationships, fetching related objects in a separate query and joining them in Python, which can be more efficient than multiple database hits.
 
@@ -627,3 +630,401 @@ snippets = Snippet.objects.select_related('user').all()
 # Assuming a 'tags' ManyToManyField
 snippets = Snippet.objects.prefetch_related('tags').all()
 ```
+
+## Manage URL Dispatcher and Views
+
+### Define Dynamic Patterns with View Function
+
+Define Dynamic URL Patterns
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <app-name>/urls.py
+from django.urls import path
+from . import views # import views from app module inside
+
+urlpatterns = [
+    path('snippets/<int:id>/', views.snippet_detail, name='snippet_detail'),
+]
+
+(venv-name)$ vi <app-name>/views.py
+from django.http import HttpResponse
+from .models import Snippet
+
+def snippet_detail(request, id):
+    try:
+        snippet = Snippet.objects.get(id=id)
+        return HttpResponse(f"Viewing snippet: {snippet.title}")
+    except Snippet.DoesNotExist:
+        return HttpResponse("Snippet not found.", status=404)
+```
+
+### Use App URL Configurations
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <proj-name>/urls.py
+# include app urls to project urls
+from django.urls import path, include
+urlpatterns = [
+    path('snippets/', include('snippets.urls')),
+]
+```
+
+The above means any URL path that starts with `snippets/` will use the URL patterns defined in `snippets/urls.py`, allowing app-specific URL configurations.
+
+### Apply App Namespacing
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <app-name>/urls.py
+from django.urls import path
+from . import views
+
+# app_name variable defines the namespace
+app_name = 'snippets'
+
+urlpatterns = [
+    path('<int:id>/', views.snippet_detail, name='snippet_detail'),
+]
+```
+
+To reverse the snippet_detail URL in a template, you would use: 
+
+```
+{% url 'snippets:snippet_detail' id=snippet.id %}
+```
+
+### Reverse Namespaced URLs in View
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <app-name>/views.py
+from django.urls import reverse
+def my_view(request):
+    detail_url = reverse('snippets:snippet_detail', kwargs={'id': 1})
+    # Use detail_url as needed...
+```
+
+### Handle Form-Data with Class-based View (CBV)
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <app-name>/forms.py
+from django import forms
+from .models import Snippet
+
+class SnippetForm(forms.ModelForm):
+    class Meta:
+        model = Snippet
+        fields = ['title', 'code', 'language']
+
+(venv-name)$ vi <app-name>/views.py
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from .forms import SnippetForm
+
+class SnippetCreateView(FormView):
+    template_name = 'snippets/snippet_form.html'
+    form_class = SnippetForm
+    success_url = reverse_lazy('snippets:snippet_list')
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.save()
+        return super().form_valid(form)
+
+(venv-name)$ vi <app-name>/urls.py
+from django.urls import path
+from .views import SnippetCreateView
+
+urlpatterns = [
+    path('create/', SnippetCreateView.as_view(), name='snippet_create'),
+]
+
+(venv-name)$ vi <app-name>/templates/snippets/snippet_form.html
+<h2>Add New Snippet</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Handle Form-Data with Function-based View (FBV)
+
+```
+(venv-name)$ cd </path/to/proj-name>
+(venv-name)$ vi <app-name>/forms.py
+from django import forms
+from .models import Snippet
+
+class SnippetForm(forms.ModelForm):
+    class Meta:
+        model = Snippet
+        fields = ['title', 'code', 'language']
+
+(venv-name)$ vi <app-name>/views.py
+from django.shortcuts import render, redirect
+from .forms import SnippetForm
+
+def create_snippet(request):
+    if request.method == 'POST':
+        form = SnippetForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('snippets:snippet_list')
+    else:
+        form = SnippetForm()
+        return render(request, 'snippets/snippet_form.html', {'form': form})
+
+(venv-name)$ vi <app-name>/urls.py
+from django.urls import path
+from .views import create_snippet
+
+urlpatterns = [
+    path('create/', create_snippet, name='snippet_create'),
+]
+
+(venv-name)$ vi <app-name>/templates/snippets/snippet_form.html
+<h2>Add New Snippet</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Leverage Generic View
+
+#### Use ListView
+
+```
+(venv-name)$ vi <app-name>/views.py
+from django.views.generic import ListView
+from .models import Snippet
+
+class SnippetListView(ListView):
+    model = Snippet
+    template_name = 'snippets/snippet_list.html'
+    context_object_name = 'snippets'
+```
+
+This view automatically queries the database for all Snippet objects and passes them to the snippet_list.html template under the context variable snippets.
+
+#### Use CreateView for Form Handling
+
+```
+(venv-name)$ vi <app-name>/views.py
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+
+from .models import Snippet
+from .forms import SnippetForm
+
+class SnippetCreateView(CreateView):
+    model = Snippet
+    form_class = SnippetForm
+    template_name = 'snippets/snippet_form.html'
+    success_url = reverse_lazy('snippets:snippet_list')
+```
+
+This view uses the SnippetForm, renders the snippet_form.html template for form display, and redirects to the snippet list view upon successful form submission.
+
+#### Configure URLs for Generic View
+
+```
+(venv-name)$ vi <app-name>/urls.py
+from django.urls import path
+from .views import SnippetListView, SnippetCreateView
+
+urlpatterns = [
+    path('', SnippetListView.as_view(), name='snippet_list'),
+    path('create/', SnippetCreateView.as_view(), name='snippet_create'),
+]
+```
+
+##  Create Custom Middleware for Request Processing
+
+### Understand Middleware Structure
+
+A middleware in Django is a class that defines one or more of the following methods: `__init__` (for setup, no arguments), `__call__` (to get a response for each request), and various `hook methods` (**process_response**, **process_view**, **process_exception**, **process_template_response**, etc.) to hook into different phases of the request/response lifecycle.
+
+```
+from django.utils.deprecation import MiddlewareMixin
+from .models import Snippet
+
+class SnippetCountMiddleware(MiddlewareMixin):
+    def process_response(self, request, response):
+        snippet_count = Snippet.objects.count()
+        response['X-Snippet-Count'] = str(snippet_count)
+        return response
+```
+
+### Register Middleware
+
+```
+(venv-name)$ vi <proj-name>/settings.py
+MIDDLEWARE = [
+    # Default Django middleware...
+    'yourapp.middleware.SnippetCountMiddleware',
+]
+```
+
+## Secure View with Permissions and User-Checks
+
+Through the use of decorators, mixins, and custom checks, Django offers a flexible and powerful system for managing access control with a variety of user roles and permissions.
+
+### Use Decorators for Function-Based View
+
+Django offers the `@login_required` and `@permission_required` decorators for easy addition of access controls to function-based views.
+
+```
+from django.contrib.auth.decorators import login_required, permission_required
+
+@login_required
+@permission_required('snippets.change_snippet', raise_exception=True)
+def edit_snippet(request, id):
+  # View logic here
+```
+
+### Utilize Mixins for Class-Based View
+
+For class-based views, Django provides mixins like `LoginRequiredMixin` and `PermissionRequiredMixin` to enforce access controls.
+
+```
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import UpdateView
+
+from .models import Snippet
+from .forms import SnippetForm
+
+class EditSnippetView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Snippet
+    form_class = SnippetForm
+    template_name = 'snippets/snippet_edit.html'
+    permission_required = ('snippets.change_snippet',)
+    # Additional view configuration...
+```
+
+### Custom User Checks
+
+Directly examining properties of the `request.user` object in your view.
+
+```
+def custom_snippet_view(request, id):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You must be staff to view this.")
+
+    # View logic for staff users...
+```
+
+## Create Advanced Template Inheritance and Filters
+
+Thanks to advanced template inheritance, developers can make a base template with common parts like headers, footers, and navigation, and then use child templates to add to or change specific blocks of content. In addition, by using custom template filters, you can format or transform context variables directly within the templates, which significantly improves the display of data.
+
+### Define Base Template
+
+Start by creating a base template that includes common elements and defines blocks for overriding. In `templates/base.html`, structure your HTML with named blocks using the `{% block block_name %}{% endblock %}` tags.
+
+```
+(venv-name)$ vi <app-name>/templates/base.py
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MyWebSite{% endblock %}</title>
+  </head>
+
+  <body>
+    <header>
+      <!-- Common header content -->
+    </header>
+
+    {% block content %}
+      <!-- Default content goes here if not overridden -->
+    {% endblock %}
+
+    <footer>
+      <!-- Common footer content -->
+    </footer>
+  </body>
+</html>
+```
+
+### Create Child Templates
+
+```
+{% extends "base.html" %}
+{% block title %}Snippet Details{% endblock %}
+{% block content %}
+<h1>Snippet Details</h1>
+<!-- Specific content for the snippet details page -->
+{% endblock %}
+```
+
+### Implement Custom Template Filters
+
+Sometimes, you'll need to format data in a way that is not supported by Django’s built-in template filters. You can create custom filters by defining a function in a `templatetags/your_custom_filters.py` file within your app module.
+
+```
+from django import template
+
+register = template.Library()
+
+@register.filter(name='custom_date')
+def custom_date(value):
+    # Transform the value into a custom date format
+    return value.strftime("%Y-%m-%d at %H:%M")
+```
+
+Use your custom filter in templates with the **|** character followed by the filter's name:
+
+```
+Published on: {{ snippet.created_at|custom_date }}
+```
+
+## Handle Static and Media Files
+
+### Configure Static Files
+
+The first step is to define where your static files will be stored and how they will be accessed. In your `settings.py` file, set **STATIC_URL** to specify the URL prefix to access static files, and use **STATICFILES_DIRS** to list directories where Django will search for additional static files, besides each app's **'static'** folder.
+
+```
+(venv-name)$ vi <proj-name>/settings.py
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+```
+
+For production, you should also set **STATIC_ROOT**, where Django will collect all static files using the `collectstatic` command.
+
+```
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+```
+
+### Manage Media files
+
+Handling user-uploaded files requires setting up **MEDIA_ROOT** and **MEDIA_URL** in your `settings.py` file. **MEDIA_ROOT** is the filesystem path where these files will be stored, and **MEDIA_URL** is the URL prefix for serving these files.
+
+```
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+```
+
+In production, ensure your web server is configured to serve the files in **MEDIA_ROOT** at the **MEDIA_URL** path. For development, you can add a URL pattern to serve media files.
+
+```
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    # ... your URL patterns
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+## Use Content Delivery Network (CDN)
+
+For improved performance, especially in production, consider serving your static and media files through a Content Delivery Network (CDN). This involves uploading your files to a CDN service and adjusting **STATIC_URL** and/or **MEDIA_URL** to point to the CDN. Using a CDN can significantly reduce load times by serving files from a location close to the user and reducing the bandwidth load on your server.
