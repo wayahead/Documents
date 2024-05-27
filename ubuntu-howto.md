@@ -4,8 +4,8 @@
 
 ```
 $ sudo systemctl stop unattended-upgrades.service
-$ sudo apt remove unattended-upgrade
-$ sudo apt purge unattended-upgrade
+$ sudo apt remove unattended-upgrades
+$ sudo apt purge unattended-upgrades
 ```
 
 ## Update APT Sources
