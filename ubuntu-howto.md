@@ -1,4 +1,32 @@
-# Ubuntu 22.04
+# Ubuntu 24.04
+
+## Remove `unattended-upgrades`
+
+```
+$ sudo systemctl stop unattended-upgrades.service
+$ sudo apt remove unattended-upgrade
+$ sudo apt purge unattended-upgrade
+```
+
+## Update APT Sources
+
+```
+$ sudo vi /etc/apt/sources.list.d/ubuntu.sources
+Types: deb deb-src
+URIs: http://cn.archive.ubuntu.com/ubuntu/
+Suites: noble noble-updates noble-backports
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+Types: deb deb-src
+URIs: http://security.ubuntu.com/ubuntu/
+Suites: noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+$ sudo apt update
+$ sudo apt list --upgradable
+```
 
 ## Configure Timezone
 
