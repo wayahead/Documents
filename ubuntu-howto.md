@@ -7,6 +7,11 @@ $ sudo systemctl stop unattended-upgrades.service
 $ sudo apt remove unattended-upgrades
 $ sudo apt purge unattended-upgrades
 ```
+## Upgrade Snap Store
+
+```
+$ sudo killall snap-store && sudo snap refresh
+```
 
 ## Update APT Sources
 
