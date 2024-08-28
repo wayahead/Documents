@@ -662,3 +662,13 @@ http://mirrors.tuna.tsinghua.edu.cn/ubuntu/
 http://mirrors.sohu.com/ubuntu/
 http://archive.ubuntu.com/ubuntu/
 ```
+
+## Configure OpenVPN Client
+
+```
+$ apt -y install openvpn
+
+# start VPN interface
+# openvpn-client@(name of the configuration file without the [.conf] extension)
+$ systemctl enable --now openvpn-client@client
+```
