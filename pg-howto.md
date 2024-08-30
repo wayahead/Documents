@@ -1,5 +1,16 @@
 # PostgreSQL Howto
 
+## Install PostgreSQL 16 on Ubuntu 24.04
+
+```
+$ sudo apt update
+$ sudo apt install postgresql-16 postgresql-contrib-16
+$ sudo systemctl start postgresql
+$ sudo systemctl enable postgresql
+
+$ psql --version
+```
+
 ## Install PostgreSQL 16 on Ubuntu 22.04
 
 ### Add APT Repository
