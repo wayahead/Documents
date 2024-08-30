@@ -672,3 +672,17 @@ $ sudo apt -y install openvpn
 # openvpn-client@(name of the configuration file without the [.conf] extension)
 $ sudo systemctl enable --now openvpn-client@client
 ```
+
+```bash
+#!/usr/bin/bash
+# start VPN interface
+# openvpn-client@(name of the configuration file without the [.conf] extension)
+sudo systemctl enable --now openvpn-client@x7
+```
+
+```bash
+#!/usr/bin/bash
+# stop VPN interface
+# openvpn-client@(name of the configuration file without the [.conf] extension)
+sudo systemctl disable --now openvpn-client@x7
+```
