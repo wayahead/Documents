@@ -364,7 +364,10 @@ postgres=# SELECT * from pg_extension;
 
 #### Load Installed Extension
 
+You must select database first, then load extensions to the database
+
 ```
+$ psql --host=localhost --port=6336 --dbname=<dbname> --username=<username> --password
 postgres=# CREATE EXTENSION IF NOT EXISTS "citext";
 postgres=# CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 postgres=# CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
