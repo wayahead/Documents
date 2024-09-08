@@ -47,7 +47,7 @@ $ go1.20.12 env GOROOT
 ### List available dependency upgrades
 
 ```
-$ go list -u -m all
+$ go list -u -m -mod=mod all
 ```
 
 ### Upgrade all dependencies at once
