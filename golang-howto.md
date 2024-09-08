@@ -42,6 +42,32 @@ $ go1.20.12 version
 $ go1.20.12 env GOROOT
 ```
 
+## Upgrade Dependencies
+
+### List available dependency upgrades
+
+```
+$ go list -u -m all
+```
+
+### Upgrade all dependencies at once
+
+To upgrade all dependencies at once for a given module, just run the following from the root directory of your module.
+
+This upgrades to the latest or minor patch release.
+
+```
+$ go get -u ./...
+```
+
+To also upgrade test dependencies.
+
+```
+$ go get -t -u ./...
+```
+
+
+
 ## Configure GOPROXY
 
 ```
