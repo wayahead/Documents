@@ -686,3 +686,20 @@ sudo systemctl enable --now openvpn-client@x7
 # openvpn-client@(name of the configuration file without the [.conf] extension)
 sudo systemctl disable --now openvpn-client@x7
 ```
+
+## Install and Configure
+
+```
+$ sudo apt update
+$ sudo apt install samba
+$ whereis samba
+$ sudo nano /etc/samba/smb.conf
+[sambashare]
+    comment = Samba on Ubuntu
+    path = /home/username/sambashare
+    read only = no
+    browsable = yes
+$ mkdir /home/<username>/sambashare/
+$ sudo systemctl restart smbd
+$ sudo ufw allow samba
+```
