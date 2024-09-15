@@ -694,6 +694,10 @@ $ sudo apt update
 $ sudo apt install samba
 $ whereis samba
 $ sudo nano /etc/samba/smb.conf
+[global]
+    ...
+    vfs objects = catia fruit streams_xattr
+
 [sambashare]
     comment = Samba on Ubuntu
     path = /home/username/sambashare
