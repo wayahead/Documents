@@ -173,6 +173,13 @@ $ go tool cover -html=coverage.out
 $ go tool cover -html=coverage.out -o coverage.xhtml
 ```
 
+### Special Testing
+
+```
+$ go test -v -run TestUserModelTestSuite
+$ go test -v -run TestUserModelTestSuite/TestCreateUser
+```
+
 ### Short Testing
 
 ```
