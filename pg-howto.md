@@ -385,4 +385,11 @@ $ echo 'export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"' >> ~/.zshrc
 $ brew services start postgresql@17
 $ createuser -s postgres
 $ psql -h localhost -U postgres
+postgres=# create user <username> with password 'WqA1yT2z+' LOGIN REPLICATION;
+postgres=# create database <dbname> with owner=<username> encoding='UTF8';
+postgres=# grant all privileges on database <dbname> to <username>;
+postgres=# drop databse <dbname>;
+postgres=# drop role <username>;
+postgres=# \l
+postgres=# \q
 ```
