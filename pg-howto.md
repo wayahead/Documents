@@ -376,3 +376,13 @@ postgres=# CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 ```
 $ psql -U postgres -d <dbname> -f <module>.sql
 ```
+
+## Install on MacOS
+
+```
+$ brew install postgresql@17
+$ echo 'export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"' >> ~/.zshrc
+$ brew services start postgresql@17
+$ createuser -s postgres
+$ psql -h localhost -U postgres
+```
